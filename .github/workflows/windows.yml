@@ -26,6 +26,11 @@ jobs:
           restore-keys: |
             cache-build-windows
 
+      - name: Installing missing haxelibs
+        run: |
+          haxelib install hscript-improved
+        shell: cmd
+
       - name: Installing/Updating libraries
         run: |
           haxe -cp setup -D analyzer-optimize -main Main --interp
