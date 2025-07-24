@@ -14,7 +14,8 @@ class OptionsState extends MusicBeatState
     'Graphics',
     'Visuals',
     'Gameplay',
-    'Misc'
+    'Misc',
+    'Optimization'
     #if TRANSLATIONS_ALLOWED, 'Language', #end
   ];
 
@@ -32,22 +33,33 @@ class OptionsState extends MusicBeatState
         FlxTransitionableState.skipNextTransOut = true;
         FlxTransitionableState.skipNextTransIn = true;
         MusicBeatState.switchState(new slushi.slushiOptions.SlushiOptionsState());
+
       case 'Note Options':
         FlxTransitionableState.skipNextTransOut = true;
         FlxTransitionableState.skipNextTransIn = true;
         MusicBeatState.switchState(new options.NoteOptions());
+
       case 'Controls':
         openSubState(new options.ControlsSubState());
+
       case 'Graphics':
         openSubState(new options.GraphicsSettingsSubState());
+
       case 'Visuals':
         openSubState(new options.VisualsSettingsSubState());
+
       case 'Gameplay':
         openSubState(new options.GameplaySettingsSubState());
+
       case 'Misc':
         openSubState(new options.MiscSettingsSubState());
+
       case 'Adjust Delay and Combo':
         MusicBeatState.switchState(new options.NoteOffsetState());
+
+      case 'Optimization':
+        openSubState(new options.OptimizationSubState());
+
       case 'Language':
         openSubState(new options.LanguageSubState());
     }
@@ -116,7 +128,8 @@ class OptionsState extends MusicBeatState
   {
     super.update(elapsed);
 
-    if (FlxG.sound.music != null) Conductor.songPosition = FlxG.sound.music.time;
+    if (FlxG.sound.music != null)
+      Conductor.songPosition = FlxG.sound.music.time;
 
     var mult:Float = FlxMath.lerp(1.07, bg.scale.x, CoolUtil.clamp(1 - (elapsed * 9), 0, 1));
     bg.scale.set(mult, mult);
@@ -124,11 +137,9 @@ class OptionsState extends MusicBeatState
     bg.offset.set();
 
     if (controls.UI_UP_P) changeSelection(-1);
-
     if (controls.UI_DOWN_P) changeSelection(1);
 
     var shiftMult:Int = 1;
-
     if (FlxG.mouse.wheel != 0)
     {
       FlxG.sound.play(Paths.sound('scrollMenu'), 0.2);
@@ -149,7 +160,10 @@ class OptionsState extends MusicBeatState
         MusicBeatState.switchState(new slushi.states.SlushiMainMenuState());
       }
     }
-    else if (controls.ACCEPT) openSelectedSubstate(options[curSelected]);
+    else if (controls.ACCEPT)
+    {
+      openSelectedSubstate(options[curSelected]);
+    }
   }
 
   function changeSelection(change:Int = 0)
@@ -175,7 +189,6 @@ class OptionsState extends MusicBeatState
   override function beatHit()
   {
     super.beatHit();
-
     bg.scale.set(1.11, 1.11);
     bg.updateHitbox();
     bg.offset.set();
